@@ -592,8 +592,63 @@ code, pre, kbd {
 
 }
 
+/* ── Responsive: typography + spacing ──────────────────────────────────────── */
 @media (max-width: 760px) {
   .gl-page-title { font-size: 24px; }
   .gl-card       { padding: 18px; }
   .gl-stat-card  { padding: 14px 16px; }
+}
+
+@media (max-width: 640px) {
+  .gl-topbar { padding: 0 12px; }
+  .gl-main { padding: 20px 16px 48px; }
+  .gl-page-title { font-size: 22px; }
+  .gl-page-subtitle { font-size: 13px; }
+  .gl-card { padding: 14px; }
+  .gl-card-sm { padding: 12px; }
+  .gl-stat-card { padding: 14px; }
+  .gl-stat-value { font-size: 26px; }
+  .gl-btn-lg { padding: 11px 18px; font-size: 14px; }
+  .gl-btn-md { padding: 9px 14px; font-size: 14px; }
+  .gl-modal-overlay { padding: 12px; }
+  .gl-modal {
+    padding: 20px;
+    max-width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+}
+
+/* ── Responsive: tables stacked on small screens ───────────────────────────── */
+@media (max-width: 768px) {
+  .gl-table thead { display: none; }
+  .gl-table tr {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .gl-table tr:last-child { border-bottom: none; }
+  .gl-table td {
+    padding: 0;
+    border: none;
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  /* Middle cells (badges, statuses) sit inline as chips */
+  .gl-table tr td:not(:first-child):not(:last-child) {
+    flex: 0 0 auto;
+  }
+  /* Last cell (actions): full width, left-aligned on mobile */
+  .gl-table td:last-child {
+    flex: 1 1 100%;
+    text-align: left !important;
+    margin-top: 4px;
+  }
+  .gl-table td:last-child > div {
+    justify-content: flex-start !important;
+  }
+  .gl-table tr:hover td { background: transparent; }
 }

@@ -94,8 +94,8 @@ import {
               </div>
             }
 
-            <a routerLink="/app/lecciones" class="gl-btn gl-btn-lg gl-btn-primary" style="display:inline-flex">
-              Volver al mapa
+            <a [routerLink]="returnPath()" class="gl-btn gl-btn-lg gl-btn-primary" style="display:inline-flex">
+              {{ fromTareas() ? 'Volver a tareas' : 'Volver al mapa' }}
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a1a00" stroke-width="2" aria-hidden="true">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
               </svg>
@@ -107,10 +107,10 @@ import {
 
           <!-- Progress header -->
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
-            <a routerLink="/app/lecciones"
+            <a [routerLink]="returnPath()"
                class="gl-btn gl-btn-sm gl-btn-ghost"
                style="padding:8px;border-radius:var(--r-md);flex-shrink:0"
-               aria-label="Volver al mapa">
+               [attr.aria-label]="fromTareas() ? 'Volver a tareas' : 'Volver al mapa'">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M19 12H5M12 19l-7-7 7-7"/>
               </svg>
@@ -235,7 +235,7 @@ import {
 
             <!-- ── Emparejar ───────────────────────────────────────────────── -->
             @if (ex.tipo === 'emparejar') {
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div class="grid grid-cols-1 sm:grid-cols-2" style="gap:10px">
                 <!-- Left: terms -->
                 <div style="display:flex;flex-direction:column;gap:7px">
                   <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Concepto</div>
@@ -469,6 +469,10 @@ export class LessonViewComponent {
     map((p) => p.get('id') ?? ''),
     distinctUntilChanged(),
   );
+
+  // ── Origen de la navegación (para volver al sitio correcto) ──────────────
+  readonly fromTareas = computed(() => this.route.snapshot.queryParamMap.get('from') === 'tareas');
+  readonly returnPath = computed(() => this.fromTareas() ? '/app/tareas' : '/app/lecciones');
 
   readonly lesson = toSignal(
     this.id$.pipe(switchMap((id) => this.lessonService.getLeccion(id).pipe(catchError(() => of(null))))),
@@ -968,7 +972,7 @@ export class LessonViewComponent {
         if (result) {
           this.progresoService.refresh();
           this.finishResult.set(result);
-        } else { void this.router.navigate(['/app/lecciones']); }
+        } else { void this.router.navigate([this.returnPath()]); }
       });
   }
 }

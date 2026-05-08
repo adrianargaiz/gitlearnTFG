@@ -66,7 +66,7 @@ import { formatShortDate } from '../../../shared/utils/format-date';
           </div>
         </section>
 
-        <div class="grid gap-5" style="grid-template-columns:1fr 280px">
+        <div class="grid gap-5 grid-cols-1 lg:grid-cols-[1fr_280px]">
           <!-- Recent lessons -->
           <section class="gl-card">
             <div class="flex items-center justify-between mb-5">

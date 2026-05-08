@@ -132,12 +132,14 @@ import { TopbarComponent } from '../../../shared/topbar/topbar.component';
               <!-- Action -->
               @if (!tarea.completada) {
                 <a [routerLink]="['/app/lecciones', tarea.leccionId._id]"
+                   [queryParams]="{ from: 'tareas' }"
                    class="gl-btn gl-btn-md gl-btn-primary"
                    style="flex-shrink:0">
                   Comenzar
                 </a>
               } @else {
                 <a [routerLink]="['/app/lecciones', tarea.leccionId._id]"
+                   [queryParams]="{ from: 'tareas' }"
                    class="gl-btn gl-btn-md gl-btn-ghost"
                    style="flex-shrink:0">
                   Repasar

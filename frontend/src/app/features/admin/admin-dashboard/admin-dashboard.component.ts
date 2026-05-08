@@ -66,7 +66,7 @@ import { formatShortDate } from '../../../shared/utils/format-date';
           </div>
         </section>
 
-        <div class="grid gap-5" style="grid-template-columns:1fr 320px">
+        <div class="grid gap-5 grid-cols-1 lg:grid-cols-[1fr_320px]">
           <!-- Left: recent lessons + quick nav -->
           <div class="flex flex-col gap-4">
             <!-- Recent lessons -->

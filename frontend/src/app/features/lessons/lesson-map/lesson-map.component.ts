@@ -220,8 +220,12 @@ export class LessonMapComponent {
     const isLevelLocked = (nivel: NivelLeccion): boolean => {
       const idx = LESSON_LEVEL_ORDER.indexOf(nivel);
       if (idx === 0) return false;
-      const prevNivel = LESSON_LEVEL_ORDER[idx - 1];
-      const prevLessons = lecciones.filter((l) => l.nivel === prevNivel);
+      const prevLevels = LESSON_LEVEL_ORDER.slice(0, idx);
+      const prevLessons = lecciones.filter((l) =>
+        (prevLevels as readonly NivelLeccion[]).includes(l.nivel),
+      );
+      // No previous lessons exist (DB without seed for any prior level) → don't lock.
+      if (prevLessons.length === 0) return false;
       return !prevLessons.every((l) => completedIds.has(l._id));
     };
 

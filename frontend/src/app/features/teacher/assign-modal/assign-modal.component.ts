@@ -28,7 +28,7 @@ import { Asignacion } from '../../../core/models/learning.model';
       <div style="position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(2px)"></div>
 
       <div class="gl-card"
-           style="position:relative;z-index:1;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:24px">
+           style="position:relative;z-index:1;width:min(520px, calc(100vw - 24px));max-height:92vh;overflow-y:auto;padding:24px">
 
         <!-- Header -->
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px">

@@ -68,8 +68,8 @@ import { TopbarComponent } from '../../../shared/topbar/topbar.component';
           </div>
         </div>
 
-        <!-- 2-column grid -->
-        <div style="display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start">
+        <!-- 2-column grid (1 col mobile, 2 col >= lg) -->
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-5 items-start">
 
           <!-- Left column -->
           <div style="display:flex;flex-direction:column;gap:20px">
