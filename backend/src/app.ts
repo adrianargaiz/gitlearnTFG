@@ -11,6 +11,10 @@ import { router } from './routes';
 
 export const app: Application = express();
 
+// Behind nginx (or any reverse proxy): trust the first hop so X-Forwarded-For
+// is honored and express-rate-limit / req.ip work correctly.
+app.set('trust proxy', 1);
+
 configurePassport();
 
 app.use(passport.initialize());
