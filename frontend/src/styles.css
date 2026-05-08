@@ -1,0 +1,599 @@
+/* ── Google Fonts ──────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* ── Tailwind v4 ────────────────────────────────────────────────────────────── */
+@import "tailwindcss";
+
+/* ── Design tokens (GitLearn — Duolingo-inspired dark) ─────────────────────── */
+@theme {
+  /* Backgrounds */
+  --color-bg-base:      #0F172A;
+  --color-bg-surface:   #111827;
+  --color-bg-elevated:  #1F2937;
+  --color-border:       #334155;
+
+  /* Text */
+  --color-text-primary:   #F8FAFC;
+  --color-text-secondary: #CBD5E1;
+  --color-text-muted:     #94A3B8;
+
+  /* Primary accent (Duolingo green) */
+  --color-accent:         #58CC02;
+  --color-accent-hover:   #46A302;
+  --color-accent-soft:    rgba(88, 204, 2, 0.12);
+
+  /* Secondary (links / info) */
+  --color-link:           #3B82F6;
+  --color-link-hover:     #2563EB;
+
+  /* States */
+  --color-warning: #F59E0B;
+  --color-error:   #EF4444;
+  --color-success: #58CC02;
+
+  /* Fonts */
+  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ── CSS custom properties ──────────────────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --bg:       #0F172A;
+  --surface:  #111827;
+  --surface2: #1F2937;
+  --surface3: #273548;
+  --border:         #334155;
+  --border-subtle:  #1e2d40;
+
+  /* Aliases */
+  --bg-base:    #0F172A;
+  --bg-surface: #111827;
+  --bg-elevated:#1F2937;
+
+  /* Text */
+  --text:  #F8FAFC;
+  --text2: #CBD5E1;
+  --muted: #94A3B8;
+  --text-primary:   #F8FAFC;
+  --text-secondary: #CBD5E1;
+  --text-muted:     #94A3B8;
+
+  /* Green (Duolingo) */
+  --green:        #58CC02;
+  --green-dark:   #46A302;
+  --green-hover:  #46A302;
+  --green-bg:     rgba(88, 204, 2, 0.12);
+  --green-border: rgba(88, 204, 2, 0.30);
+
+  /* Blue */
+  --blue:        #3B82F6;
+  --blue-bg:     rgba(59, 130, 246, 0.12);
+  --blue-border: rgba(59, 130, 246, 0.30);
+
+  /* Violet */
+  --violet:        #7C3AED;
+  --violet-bg:     rgba(124, 58, 237, 0.12);
+  --violet-border: rgba(124, 58, 237, 0.30);
+
+  /* Orange */
+  --orange:        #F97316;
+  --orange-bg:     rgba(249, 115, 22, 0.12);
+  --orange-border: rgba(249, 115, 22, 0.30);
+
+  /* Gold */
+  --gold:        #D29922;
+  --gold-bg:     rgba(210, 153, 34, 0.12);
+  --gold-border: rgba(210, 153, 34, 0.30);
+
+  /* Amber */
+  --amber:        #F59E0B;
+  --amber-bg:     rgba(245, 158, 11, 0.12);
+  --amber-border: rgba(245, 158, 11, 0.30);
+
+  /* Grey */
+  --grey:        #64748B;
+  --grey-bg:     rgba(100, 116, 139, 0.12);
+  --grey-border: rgba(100, 116, 139, 0.30);
+
+  /* Error */
+  --error:        #EF4444;
+  --error-bg:     rgba(239, 68, 68, 0.12);
+  --error-border: rgba(239, 68, 68, 0.30);
+
+  /* Accent aliases */
+  --accent:       #58CC02;
+  --accent-hover: #46A302;
+  --accent-soft:  rgba(88, 204, 2, 0.12);
+  --link:         #3B82F6;
+  --link-hover:   #2563EB;
+  --success:      #58CC02;
+  --warning:      #F59E0B;
+
+  /* Border radius */
+  --r-xs:   6px;
+  --r-sm:   8px;
+  --r-md:   12px;
+  --r-lg:   16px;
+  --r-xl:   20px;
+  --r-2xl:  28px;
+  --r-full: 9999px;
+}
+
+/* ── Global resets ──────────────────────────────────────────────────────────── */
+/* Tailwind preflight (in @layer base) already provides: box-sizing, margin: 0, padding: 0.
+   Defining them outside any @layer would override all layered component/utility styles. */
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, sans-serif;
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code, pre, kbd {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* ── Focus ring ─────────────────────────────────────────────────────────────── */
+*:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@layer components {
+
+  /* ── Topbar ─────────────────────────────────────────────────────────────── */
+  .gl-topbar {
+    height: 64px;
+    background: var(--surface);
+    border-bottom: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  /* ── Layout ─────────────────────────────────────────────────────────────── */
+  .gl-main {
+    width: 100%;
+    padding: 32px 24px 56px;
+  }
+  @media (min-width: 768px) {
+    .gl-main { padding: 40px 48px 64px; }
+  }
+
+  /* ── Page header ─────────────────────────────────────────────────────────── */
+  .gl-page-title {
+    font-size: 28px;
+    line-height: 1.15;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .gl-page-subtitle {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  /* ── Cards ───────────────────────────────────────────────────────────────── */
+  .gl-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-xl);
+    padding: 24px;
+  }
+
+  .gl-card-sm {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 16px;
+  }
+
+  /* ── Stat card ───────────────────────────────────────────────────────────── */
+  .gl-stat-card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-xl);
+    padding: 20px 24px;
+  }
+
+  .gl-stat-value {
+    font-size: 32px;
+    line-height: 1;
+    font-weight: 800;
+    color: var(--text);
+  }
+
+  .gl-stat-label {
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* ── Buttons ─────────────────────────────────────────────────────────────── */
+  .gl-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .gl-btn:disabled { opacity: 0.45; cursor: not-allowed; pointer-events: none; }
+
+  .gl-btn-lg { padding: 14px 28px; font-size: 16px; border-radius: var(--r-xl); }
+  .gl-btn-md { padding: 10px 20px; font-size: 15px; border-radius: var(--r-lg); }
+  .gl-btn-sm { padding: 7px  14px; font-size: 13px; border-radius: var(--r-md); }
+
+  .gl-btn-primary {
+    background: var(--green);
+    color: #0a1a00;
+    border-bottom: 3px solid var(--green-dark);
+  }
+  .gl-btn-primary:hover:not(:disabled) {
+    background: var(--green-dark);
+    transform: translateY(-1px);
+  }
+  .gl-btn-primary:active:not(:disabled) {
+    transform: translateY(1px);
+    border-bottom-width: 1px;
+  }
+
+  .gl-btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+  }
+  .gl-btn-secondary:hover:not(:disabled) {
+    background: var(--surface3);
+    border-color: var(--muted);
+  }
+
+  .gl-btn-ghost {
+    background: transparent;
+    color: var(--text2);
+    border: 1.5px solid transparent;
+  }
+  .gl-btn-ghost:hover:not(:disabled) {
+    background: var(--surface2);
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  .gl-btn-danger {
+    background: var(--error-bg);
+    color: var(--error);
+    border: 1.5px solid var(--error-border);
+  }
+  .gl-btn-danger:hover:not(:disabled) {
+    background: var(--error);
+    color: #fff;
+  }
+
+  .gl-btn-blue {
+    background: var(--blue);
+    color: #fff;
+    border-bottom: 3px solid rgba(59, 130, 246, 0.5);
+  }
+  .gl-btn-blue:hover:not(:disabled) {
+    background: #2563eb;
+    transform: translateY(-1px);
+  }
+
+  /* ── Inputs ──────────────────────────────────────────────────────────────── */
+  .gl-input,
+  .gl-select {
+    width: 100%;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.15s;
+    min-height: 46px;
+  }
+  .gl-input::placeholder { color: var(--muted); }
+  .gl-input:focus,
+  .gl-select:focus { border-color: var(--green); }
+  .gl-input.error,
+  .gl-select.error { border-color: var(--error); }
+
+  .gl-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2394A3B8' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  .gl-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  /* ── Alerts ──────────────────────────────────────────────────────────────── */
+  .gl-alert {
+    padding: 12px 16px;
+    border-radius: var(--r-md);
+    border: 1.5px solid;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .gl-alert-error   { background: var(--error-bg);  color: var(--error);  border-color: var(--error-border); }
+  .gl-alert-success { background: var(--green-bg);  color: var(--green);  border-color: var(--green-border); }
+  .gl-alert-info    { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-border);  }
+
+  /* ── Divider ─────────────────────────────────────────────────────────────── */
+  .gl-divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+  /* ── Badges ──────────────────────────────────────────────────────────────── */
+  .gl-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: var(--r-full);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    border: 1px solid;
+  }
+  .gl-badge-green  { background: var(--green-bg);  color: var(--green);  border-color: var(--green-border);  }
+  .gl-badge-amber  { background: var(--amber-bg);  color: var(--amber);  border-color: var(--amber-border);  }
+  .gl-badge-grey   { background: var(--grey-bg);   color: var(--grey);   border-color: var(--grey-border);   }
+  .gl-badge-gold   { background: var(--gold-bg);   color: var(--gold);   border-color: var(--gold-border);   }
+  .gl-badge-orange { background: var(--orange-bg); color: var(--orange); border-color: var(--orange-border); }
+  .gl-badge-blue   { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-border);   }
+  .gl-badge-violet { background: var(--violet-bg); color: var(--violet); border-color: var(--violet-border); }
+  .gl-badge-error  { background: var(--error-bg);  color: var(--error);  border-color: var(--error-border);  }
+
+  /* ── Progress ────────────────────────────────────────────────────────────── */
+  .gl-progress-track {
+    width: 100%;
+    height: 10px;
+    background: var(--surface3);
+    border-radius: var(--r-full);
+    overflow: hidden;
+  }
+  .gl-progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: var(--r-full);
+    transition: width 0.6s cubic-bezier(.34, 1.56, .64, 1);
+  }
+
+  /* ── Tabs ────────────────────────────────────────────────────────────────── */
+  .gl-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface2);
+    padding: 4px;
+    border-radius: var(--r-lg);
+    border: 1.5px solid var(--border);
+    width: fit-content;
+  }
+  .gl-tab {
+    min-height: 34px;
+    padding: 7px 16px;
+    border-radius: var(--r-md);
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+  }
+  .gl-tab:hover { color: var(--text); background: var(--surface3); }
+  .gl-tab.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+
+  /* ── Tables ──────────────────────────────────────────────────────────────── */
+  .gl-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .gl-table th {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: var(--surface2);
+    border-bottom: 1.5px solid var(--border);
+  }
+  .gl-table td {
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--text2);
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: middle;
+  }
+  .gl-table tr:hover td { background: var(--surface2); }
+  .gl-table tr:last-child td { border-bottom: none; }
+
+  /* ── Toast ───────────────────────────────────────────────────────────────── */
+  .gl-toast-container {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+  }
+  .gl-toast {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-xl);
+    padding: 14px 20px;
+    min-width: 300px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    animation: toastIn 0.3s cubic-bezier(.34, 1.56, .64, 1);
+    pointer-events: all;
+  }
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(16px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  /* ── Modal ───────────────────────────────────────────────────────────────── */
+  .gl-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.15s ease;
+  }
+  .gl-modal {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--r-2xl);
+    padding: 32px;
+    max-width: 480px;
+    width: 100%;
+    animation: modalIn 0.2s cubic-bezier(.34, 1.56, .64, 1);
+  }
+  @keyframes fadeIn  { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.94) translateY(8px); }
+    to   { opacity: 1; transform: scale(1)    translateY(0); }
+  }
+
+  /* ── Skeleton ────────────────────────────────────────────────────────────── */
+  .gl-skeleton {
+    background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: var(--r-sm);
+  }
+  @keyframes shimmer {
+    0%   { background-position:  200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* ── Lesson path nodes ───────────────────────────────────────────────────── */
+  .gl-path-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+  }
+  .gl-path-node-circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 3px solid;
+    position: relative;
+  }
+  .gl-path-node-circle.completed {
+    background: var(--green-bg);
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .gl-path-node-circle.available { border-color: currentColor; }
+  .gl-path-node-circle.locked {
+    background: var(--surface2);
+    border-color: var(--border);
+    color: var(--muted);
+    cursor: default;
+  }
+  .gl-path-node:hover .gl-path-node-circle.available {
+    transform: scale(1.08);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .gl-path-node:hover .gl-path-node-circle.completed { transform: scale(1.05); }
+
+  /* ── Exercise options ────────────────────────────────────────────────────── */
+  .gl-option {
+    width: 100%;
+    text-align: left;
+    padding: 16px 20px;
+    background: var(--surface2);
+    border: 2px solid var(--border);
+    border-radius: var(--r-xl);
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 500;
+  }
+  .gl-option:hover:not(:disabled) {
+    border-color: var(--blue);
+    background: var(--blue-bg);
+    transform: translateY(-1px);
+  }
+  .gl-option.selected  { border-color: var(--blue);  background: var(--blue-bg);  }
+  .gl-option.correct   { border-color: var(--green); background: var(--green-bg); color: var(--green); }
+  .gl-option.incorrect { border-color: var(--error); background: var(--error-bg); color: var(--error); }
+
+}
+
+@media (max-width: 760px) {
+  .gl-page-title { font-size: 24px; }
+  .gl-card       { padding: 18px; }
+  .gl-stat-card  { padding: 14px 16px; }
+}

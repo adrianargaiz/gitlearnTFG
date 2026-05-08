@@ -1,0 +1,54 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: gitlearn-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: gitlearn
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - gitlearn-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    container_name: gitlearn-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mongo:27017/gitlearn
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - gitlearn-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    container_name: gitlearn-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - gitlearn-network
+
+volumes:
+  mongo_data:
+    name: gitlearn-mongo-data
+
+networks:
+  gitlearn-network:
+    name: gitlearn-network

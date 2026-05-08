@@ -1,0 +1,83 @@
+// ── Tailwind v4 ────────────────────────────────────────────────────────────────
+@import "tailwindcss";
+
+// ── Design tokens (GitLearn dark theme) ───────────────────────────────────────
+@theme {
+  // Colors — backgrounds & surfaces
+  --color-bg-base:      #0D1117;
+  --color-bg-surface:   #161B22;
+  --color-bg-card:      #1C2128;
+  --color-bg-input:     #0D1117;
+  --color-bg-border:    #30363D;
+
+  // Colors — accent
+  --color-accent-start: #7C3AED;
+  --color-accent-end:   #4F46E5;
+  --color-accent-blue:  #3B82F6;
+  --color-accent-light: #A78BFA;
+  --color-success:      #3FB950;
+  --color-error:        #F85149;
+  --color-warning:      #D29922;
+  --color-orange:       #F97316;
+  --color-white:        #FFFFFF;
+
+  // Colors — text
+  --color-text-primary:   #E6EDF3;
+  --color-text-secondary: #8B949E;
+  --color-text-muted:     #484F58;
+
+  // Typography
+  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+// ── CSS custom properties (runtime access from Angular components) ─────────────
+:root {
+  --bg-base:        #0D1117;
+  --bg-surface:     #161B22;
+  --bg-card:        #1C2128;
+  --bg-input:       #0D1117;
+  --bg-border:      #30363D;
+  --accent-start:   #7C3AED;
+  --accent-end:     #4F46E5;
+  --accent-blue:    #3B82F6;
+  --accent-light:   #A78BFA;
+  --success:        #3FB950;
+  --error:          #F85149;
+  --warning:        #D29922;
+  --orange:         #F97316;
+  --white:          #FFFFFF;
+  --text-primary:   #E6EDF3;
+  --text-secondary: #8B949E;
+  --text-muted:     #484F58;
+}
+
+// ── Global resets ──────────────────────────────────────────────────────────────
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-family-sans, 'Inter', sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code,
+pre,
+kbd {
+  font-family: var(--font-family-mono, 'JetBrains Mono', monospace);
+}
+
+// ── Google Fonts import ────────────────────────────────────────────────────────
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+// ── Angular Material dark theme override ──────────────────────────────────────
+// Will be extended as Material components are added

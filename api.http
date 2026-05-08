@@ -1,0 +1,291 @@
+# GitLearn API — REST Client (VS Code extension: "REST Client" by Huachao Mao)
+# Uso: Ctrl+Click en "Send Request" sobre cada bloque.
+# Las variables @token_* se actualizan manualmente tras hacer login.
+
+@base = http://localhost:3000/api
+
+# ── Pega aquí el JWT tras hacer login ────────────────────────────────────────
+@token_estudiante = PASTE_ESTUDIANTE_JWT_HERE
+@token_profesor   = PASTE_PROFESOR_JWT_HERE
+@token_admin      = PASTE_ADMIN_JWT_HERE
+
+# ── IDs de ejemplo (actualizar con valores reales) ────────────────────────────
+@leccion_id   = LECCION_ID_HERE
+@ejercicio_id = EJERCICIO_ID_HERE
+@usuario_id   = USUARIO_ID_HERE
+
+
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  AUTH                                                                        ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+### [AUTH] Registrar como estudiante (rol por defecto)
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "Test Estudiante",
+  "email": "test@example.com",
+  "password": "Test1234"
+}
+
+### [AUTH] Registrar como profesor (campo rol opcional)
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{
+  "nombre": "Test Profesor",
+  "email": "test.prof@example.com",
+  "password": "Test1234",
+  "rol": "profesor"
+}
+
+# NOTA: rol "administrador" no se puede crear por registro.
+# Solo vía BD directamente o usando PUT /admin/usuarios/:id/rol.
+
+### [AUTH] Login estudiante  ← copia el token en @token_estudiante
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "Test1234"
+}
+
+### [AUTH] Login profesor  ← copia el token en @token_profesor
+# Registra primero un profesor con el bloque de arriba (test.prof@example.com)
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test.prof@example.com",
+  "password": "Test1234"
+}
+
+### [AUTH] Login admin  ← copia el token en @token_admin
+# El admin debe crearse vía BD o promocionar un profesor con PUT /admin/usuarios/:id/rol
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "ChangeThisInDB"
+}
+
+### [AUTH] Logout
+POST {{base}}/auth/logout
+Authorization: Bearer {{token_estudiante}}
+
+### [AUTH] GitHub OAuth — abre en navegador directamente
+# GET {{base}}/auth/github
+
+
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  LECCIONES  (público / profesor)                                             ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+### [LECCIONES] Listar publicadas (público)
+GET {{base}}/lecciones
+
+### [LECCIONES] Obtener lección por ID (público)
+GET {{base}}/lecciones/{{leccion_id}}
+
+### [LECCIONES] Crear lección (requiere rol: profesor)
+POST {{base}}/lecciones
+Authorization: Bearer {{token_profesor}}
+Content-Type: application/json
+
+{
+  "titulo": "Nueva lección de prueba",
+  "descripcion": "Descripción de la lección de prueba",
+  "nivel": "básico",
+  "xpRecompensa": 30,
+  "orden": 99
+}
+
+### [LECCIONES] Editar lección (requiere rol: profesor, lección propia)
+PUT {{base}}/lecciones/{{leccion_id}}
+Authorization: Bearer {{token_profesor}}
+Content-Type: application/json
+
+{
+  "titulo": "Título actualizado",
+  "descripcion": "Descripción actualizada",
+  "xpRecompensa": 40
+}
+
+### [LECCIONES] Eliminar lección (requiere rol: profesor, lección propia)
+DELETE {{base}}/lecciones/{{leccion_id}}
+Authorization: Bearer {{token_profesor}}
+
+
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  EJERCICIOS  (público lectura / profesor escritura)                          ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+### [EJERCICIOS] Listar ejercicios de una lección
+GET {{base}}/ejercicios/{{leccion_id}}
+Authorization: Bearer {{token_estudiante}}
+
+### [EJERCICIOS] Crear ejercicio opción múltiple (requiere rol: profesor)
+POST {{base}}/ejercicios
+Authorization: Bearer {{token_profesor}}
+Content-Type: application/json
+
+{
+  "leccionId": "{{leccion_id}}",
+  "tipo": "opcionMultiple",
+  "enunciado": "¿Qué comando inicializa un repositorio Git?",
+  "opciones": ["git start", "git init", "git new", "git create"],
+  "respuestaCorrecta": "git init",
+  "explicacion": "El comando git init crea un nuevo repositorio Git vacío.",
+  "orden": 1
+}
+
+### [EJERCICIOS] Crear ejercicio rellenar huecos (requiere rol: profesor)
+POST {{base}}/ejercicios
+Authorization: Bearer {{token_profesor}}
+Content-Type: application/json
+
+{
+  "leccionId": "{{leccion_id}}",
+  "tipo": "rellenarHuecos",
+  "enunciado": "Para añadir todos los archivos al área de staging se usa: git ___ .",
+  "opciones": [],
+  "respuestaCorrecta": "add .",
+  "explicacion": "git add . añade todos los cambios del directorio actual al área de staging.",
+  "orden": 2
+}
+
+### [EJERCICIOS] Editar ejercicio (requiere rol: profesor)
+PUT {{base}}/ejercicios/{{ejercicio_id}}
+Authorization: Bearer {{token_profesor}}
+Content-Type: application/json
+
+{
+  "enunciado": "Enunciado actualizado",
+  "explicacion": "Explicación actualizada"
+}
+
+### [EJERCICIOS] Eliminar ejercicio (requiere rol: profesor)
+DELETE {{base}}/ejercicios/{{ejercicio_id}}
+Authorization: Bearer {{token_profesor}}
+
+
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  PROGRESO                                                                    ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+### [PROGRESO] Ver mi progreso (propio usuario)
+GET {{base}}/progreso/{{usuario_id}}
+Authorization: Bearer {{token_estudiante}}
+
+### [PROGRESO] Registrar lección completada
+POST {{base}}/progreso
+Authorization: Bearer {{token_estudiante}}
+Content-Type: application/json
+
+{
+  "leccionId": "{{leccion_id}}",
+  "xpObtenido": 30,
+  "intentos": 1
+}
+
+
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  INSIGNIAS                                                                   ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+### [INSIGNIAS] Listar todas las insignias (catálogo)
+GET {{base}}/insignias
+
+### [INSIGNIAS] Ver insignias de un usuario
+GET {{base}}/insignias/{{usuario_id}}
+Authorization: Bearer {{token_estudiante}}
+
+
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  ADMIN                                                                       ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+### [ADMIN] Listar todos los usuarios
+GET {{base}}/admin/usuarios
+Authorization: Bearer {{token_admin}}
+
+### [ADMIN] Cambiar rol de un usuario
+PUT {{base}}/admin/usuarios/{{usuario_id}}/rol
+Authorization: Bearer {{token_admin}}
+Content-Type: application/json
+
+{
+  "rol": "profesor"
+}
+
+### [ADMIN] Activar / desactivar usuario
+PUT {{base}}/admin/usuarios/{{usuario_id}}/estado
+Authorization: Bearer {{token_admin}}
+Content-Type: application/json
+
+{
+  "activo": false
+}
+
+### [ADMIN] Listar TODAS las lecciones (incluye borradores y archivadas)
+GET {{base}}/admin/lecciones
+Authorization: Bearer {{token_admin}}
+
+### [ADMIN] Cambiar estado de una lección
+PUT {{base}}/admin/lecciones/{{leccion_id}}/estado
+Authorization: Bearer {{token_admin}}
+Content-Type: application/json
+
+{
+  "estado": "publicada"
+}
+
+### [ADMIN] Cambiar estado a archivada
+PUT {{base}}/admin/lecciones/{{leccion_id}}/estado
+Authorization: Bearer {{token_admin}}
+Content-Type: application/json
+
+{
+  "estado": "archivada"
+}
+
+
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  ASIGNACIONES  (profesor asigna lecciones a alumnos concretos)               ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+@asignacion_id = ASIGNACION_ID_HERE
+
+### [ASIGNACIONES] Listar alumnos activos (para el modal — requiere rol: profesor)
+GET {{base}}/asignaciones/estudiantes
+Authorization: Bearer {{token_profesor}}
+
+### [ASIGNACIONES] Ver mis tareas asignadas (requiere rol: estudiante)
+GET {{base}}/asignaciones/mias
+Authorization: Bearer {{token_estudiante}}
+
+### [ASIGNACIONES] Ver asignaciones creadas por mí (requiere rol: profesor)
+GET {{base}}/asignaciones/mis-asignaciones
+Authorization: Bearer {{token_profesor}}
+
+### [ASIGNACIONES] Ver asignaciones de una lección concreta (requiere rol: profesor)
+GET {{base}}/asignaciones/por-leccion/{{leccion_id}}
+Authorization: Bearer {{token_profesor}}
+
+### [ASIGNACIONES] Crear asignación (requiere rol: profesor, lección propia)
+POST {{base}}/asignaciones
+Authorization: Bearer {{token_profesor}}
+Content-Type: application/json
+
+{
+  "leccionId": "{{leccion_id}}",
+  "estudiantesIds": ["{{usuario_id}}"],
+  "fechaLimite": "2026-06-30"
+}
+
+### [ASIGNACIONES] Eliminar asignación (requiere rol: profesor, asignación propia)
+DELETE {{base}}/asignaciones/{{asignacion_id}}
+Authorization: Bearer {{token_profesor}}
